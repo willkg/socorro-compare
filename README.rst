@@ -2,6 +2,23 @@
 README
 ======
 
+What is this?
+=============
+
+This is a set of tests that compare the data in two Socorro environments.
+Comparing data is a little hard since data ebbs and flows according to
+the whims of the cosmos and it's unlikely that data in two environments
+is identical. Still, these tests compare them and try to give an
+approximation of whether they compare favorably or not.
+
+Also, if you're not Miles, Brian, Will, Mike, or Lonnen, you probably
+don't want to use this.
+
+
+Usage
+=====
+
+
 You need Docker and a bash shell to run this.
 
 Usage::
