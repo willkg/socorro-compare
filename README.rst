@@ -14,6 +14,10 @@ approximation of whether they compare favorably or not.
 Also, if you're not Miles, Brian, Will, Mike, or Lonnen, you probably
 don't want to use this.
 
+:Documentation: You're reading it!
+:Bugs: https://github.com/willkg/socorro-compare/issues
+:License: MPLv2
+
 
 Usage
 =====
