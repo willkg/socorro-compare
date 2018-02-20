@@ -8,7 +8,7 @@ import requests
 
 
 class Config:
-    def __init__(self, cfg):
+    def __init__(self, cfg=None):
         cfg = cfg or {}
         self.cfg = cfg
 
@@ -18,7 +18,10 @@ class Config:
 
 class Helper:
     def print_compare(self, left, right):
-        print(assertrepr_compare(Config(), '==', left, right))
+        cfg = Config({'verbose': 2})
+        output = assertrepr_compare(cfg, '==', left, right)
+        if output:
+            print('\n'.join(output) + '\n----')
 
     def fetch_json(self, host, url, api_token=None, params=None):
         if api_token:
