@@ -38,3 +38,16 @@ in the container with the arguments you passed.
 Example::
 
     $ ./pytest_run.sh --help
+
+
+To rebuild the image
+====================
+
+If Will or someone made changes to requirements or something, you'll need to
+rebuild the image. To do that, do this::
+
+    $ make clean
+
+
+That'll wipe out the Docker image. Next time you run ``pytest_run.sh``, it'll
+build a new one.
