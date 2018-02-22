@@ -51,7 +51,6 @@ def test_supersearch(helper, variables):
 
     startdate = utc_now() - datetime.timedelta(days=1)
 
-
     errors = 0
     for product in ['Firefox', 'FennecAndroid']:
         # Get the last N crash ids from each environment and compare them
