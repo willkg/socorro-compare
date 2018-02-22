@@ -16,8 +16,8 @@ def test_adi(helper):
     flow between two environments is the same.
 
     """
-    host_1 = helper.new_host
-    host_2 = helper.old_host
+    host_1 = helper.env1['host']
+    host_2 = helper.env2['host']
 
     TODAY = datetime.datetime.utcnow()
     LAST_WEEK = TODAY - datetime.timedelta(days=7)

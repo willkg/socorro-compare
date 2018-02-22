@@ -17,6 +17,17 @@ def utc_now():
     return datetime.datetime.now(UTC)
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        '--env1', action='store', required=True,
+        help='name of environment in vars.json to compare'
+    )
+    parser.addoption(
+        '--env2', action='store', required=True,
+        help='name of environment in vars.json to compare'
+    )
+
+
 class Config:
     def __init__(self, cfg=None):
         cfg = cfg or {}
@@ -27,9 +38,9 @@ class Config:
 
 
 class Helper:
-    def __init__(self, variables):
-        self.new_host = variables['new_host']
-        self.old_host = variables['old_host']
+    def __init__(self, env1, env2):
+        self.env1 = env1
+        self.env2 = env2
 
     def utc_now(self):
         return utc_now()
@@ -77,5 +88,19 @@ class Helper:
 
 
 @pytest.fixture
-def helper(variables):
-    return Helper(variables)
+def helper(request, variables):
+    env1 = request.config.getoption('env1')
+    env2 = request.config.getoption('env2')
+
+    assert env1 in variables, (
+        '"%s" is not a valid environment. Available environments: %s' % (
+            env1, ', '.join(variables.keys())
+        )
+    )
+    assert env2 in variables, (
+        '"%s" is not a valid environment. Available environments: %s' % (
+            env2, ', '.join(variables.keys())
+        )
+    )
+
+    return Helper(variables[env1], variables[env2])

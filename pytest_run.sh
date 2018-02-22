@@ -27,10 +27,17 @@ then
         echo "Creating an empty vars.json file..."
         cat > vars.json <<EOF
 {
-    # Fill in the new_host and old_host values and then
-    # remove this comment after you're done.
-    "new_host": "URL OF NEW HOST",
-    "old_host": "URL OF OLD HOST TO COMPARE TO"
+    # Fill in data for each environment you want to test. You
+    # need at least two, but can have as many as you like.
+    #
+    # After you're done, remove this comment because it's not
+    # valid JSON.
+    "ENV1 NAME": {
+        "host": "HOST URL"
+    },
+    "ENV2 NAME": {
+        "host": "HOST URL"
+    }
 }
 EOF
         echo ""

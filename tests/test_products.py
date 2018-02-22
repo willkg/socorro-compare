@@ -10,8 +10,8 @@ def test_product_versions(helper):
     producing the same data in both environments.
 
     """
-    host_1 = helper.new_host
-    host_2 = helper.old_host
+    host_1 = helper.env1['host']
+    host_2 = helper.env2['host']
 
     for product in ['Firefox', 'FennecAndroid']:
         print('/api/ProductVersions -> %s' % product)

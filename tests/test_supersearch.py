@@ -37,8 +37,8 @@ def test_supersearch(helper):
     Let's say N * CUTOFF of them should be common to "pass".
 
     """
-    host_1 = helper.new_host
-    host_2 = helper.old_host
+    host_1 = helper.env1['host']
+    host_2 = helper.env2['host']
 
     startdate = helper.utc_now() - datetime.timedelta(days=1)
 

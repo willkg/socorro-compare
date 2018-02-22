@@ -27,21 +27,52 @@ You need Docker and a bash shell to run this.
 
 Usage::
 
-    $ ./pytest_run.sh [ARGS]
+    $ ./pytest_run.sh --env1=ENV --env2=ENV [ARGS]
 
 
 That'll build the ``socorro_compare_1`` Docker image if it doesn't exist.
 
 Then it'll create an empty ``vars.json`` file if you don't already have one.
 You'll need to open that file in your favorite text editor, remove the
-comment, and set the variable values.
+comment, and add environment data.
 
-After that, run ``pytest_run.sh`` again and it'll execute ``pytest_build.sh``
-in the container with the arguments you passed.
+After that, run it again and it'll execute in the container with the arguments
+you passed.
 
-Example::
+To see pytest help after the container is built and there's a ``vars.json``,
+pass in ``--help``::
 
     $ ./pytest_run.sh --help
+
+
+vars.json
+=========
+
+This requires that you specify data for the environments you're comparing. You
+do that in a ``vars.json`` in the root directory.
+
+Example ``vars.json``::
+
+    {
+        "stage": {
+            "host": "https://crash-stats-stage.example.com"
+        },
+        "newstage": {
+            "host": "https://crash-stats-newstage.example.com"
+        }
+    }
+
+
+Then we'd run ``pytest_run.sh`` like this::
+
+    $ pytest_run.sh --env1=stage --env2=newstage
+
+
+NOTE: You can include as many environments as you like. You use the ``--env1``
+and ``--env2`` command line variables to specify which two you're comparing.
+
+NOTE: It has to be valid JSON. If it's not, then running ``pytest_run.sh`` will
+fail.
 
 
 To rebuild the image
