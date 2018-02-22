@@ -6,7 +6,7 @@ import datetime
 from itertools import zip_longest
 
 
-def test_adi(helper, variables):
+def test_adi(helper):
     """Compare ADI data between two environments
 
     Compare ADI data for product/platform combinations between the two
@@ -16,8 +16,8 @@ def test_adi(helper, variables):
     flow between two environments is the same.
 
     """
-    host_1 = variables['new_host']
-    host_2 = variables['old_host']
+    host_1 = helper.new_host
+    host_2 = helper.old_host
 
     TODAY = datetime.datetime.utcnow()
     LAST_WEEK = TODAY - datetime.timedelta(days=7)

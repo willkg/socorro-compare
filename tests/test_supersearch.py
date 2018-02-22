@@ -4,14 +4,13 @@
 
 import datetime
 
-import isodate
 
+# Number of results to look at
+N = 500
 
-UTC = isodate.UTC
-
-
-def utc_now():
-    return datetime.datetime.now(UTC)
+# Percent of results that should be the same between both environments
+# to "pass"
+CUTOFF = 0.75
 
 
 def crashid_key(crashid):
@@ -27,15 +26,7 @@ def to_str(crashids):
         return '%s' % crashids
 
 
-# Number of results to look at
-N = 500
-
-# Percent of results that should be the same between both environments
-# to "pass"
-CUTOFF = 0.75
-
-
-def test_supersearch(helper, variables):
+def test_supersearch(helper):
     """Compare Supersearch results between two environments
 
     Look at two sets of crash ids from a Supersearch for a specific product.
@@ -46,10 +37,10 @@ def test_supersearch(helper, variables):
     Let's say N * CUTOFF of them should be common to "pass".
 
     """
-    host_1 = variables['new_host']
-    host_2 = variables['old_host']
+    host_1 = helper.new_host
+    host_2 = helper.old_host
 
-    startdate = utc_now() - datetime.timedelta(days=1)
+    startdate = helper.utc_now() - datetime.timedelta(days=1)
 
     errors = 0
     for product in ['Firefox', 'FennecAndroid']:
