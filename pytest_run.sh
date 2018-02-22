@@ -33,10 +33,12 @@ then
     # After you're done, remove this comment because it's not
     # valid JSON.
     "ENV1 NAME": {
-        "host": "HOST URL"
+        "host": "HOST URL",
+        "api_token": ""
     },
     "ENV2 NAME": {
-        "host": "HOST URL"
+        "host": "HOST URL",
+        "api_token": ""
     }
 }
 EOF

@@ -55,13 +55,19 @@ Example ``vars.json``::
 
     {
         "stage": {
-            "host": "https://crash-stats-stage.example.com"
+            "host": "https://crash-stats-stage.example.com",
+            "api_token": "xxxxx"
         },
         "newstage": {
-            "host": "https://crash-stats-newstage.example.com"
+            "host": "https://crash-stats-newstage.example.com",
+            "api_token": "xxxxx"
         }
     }
 
+
+NOTE: If you don't have API tokens for the environment, you can omit them or
+make the values empty strings. Tests that require API tokens will degrade or
+skip.
 
 Then we'd run ``pytest_run.sh`` like this::
 

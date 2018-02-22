@@ -70,7 +70,7 @@ class Helper:
 
         return resp.json()
 
-    def fetch_crashids(self, host, product, results=100):
+    def fetch_crashids(self, host, product, api_token=None, results=100):
         startdate = utc_now() - datetime.timedelta(days=1)
 
         url = '/api/SuperSearch'
@@ -84,7 +84,8 @@ class Helper:
             '_results_number': results
         }
 
-        return [item['uuid'] for item in self.fetch_json(host, url, params=params)['hits']]
+        resp = self.fetch_json(host, url, api_token=api_token, params=params)
+        return [item['uuid'] for item in resp['hits']]
 
 
 @pytest.fixture
