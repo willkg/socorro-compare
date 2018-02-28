@@ -26,6 +26,10 @@ def pytest_addoption(parser):
         '--env2', action='store', required=True,
         help='name of environment in vars.json to compare'
     )
+    parser.addoption(
+        '--crashids', action='store', default='',
+        help='comma-delimited list of crashids to look at in relevant tests'
+    )
 
 
 class Config:
