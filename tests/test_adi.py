@@ -5,9 +5,26 @@
 import datetime
 from itertools import zip_longest
 
+import pytest
 
-def test_adi(helper):
-    """Compare ADI data between two environments
+
+def build_map(adi_data):
+   """Build a map of (date, channel, version) -> item"""
+   return dict([
+       ((item['date'], item['build_type'], item['version']), item)
+       for item in adi_data
+   ])
+
+
+@pytest.mark.parametrize('product, platform', [
+    ('Firefox', 'Mac OS X'),
+    ('Firefox', 'Linux'),
+    ('Firefox', 'Windows'),
+    ('Firefox', 'Unknown'),
+    ('FennecAndroid', 'Linux')
+])
+def test_adi(helper, product, platform):
+    """Compare ADI data between two environments for a product/platform
 
     Compare ADI data for product/platform combinations between the two
     environments for the last 7 days. It should be the same.
@@ -25,44 +42,55 @@ def test_adi(helper):
     TODAY = TODAY.strftime('%Y-%m-%d')
     LAST_WEEK = LAST_WEEK.strftime('%Y-%m-%d')
 
-    for product, platform in [
-            ('Firefox', 'Mac OS X'),
-            ('Firefox', 'Linux'),
-            ('Firefox', 'Windows'),
-            ('Firefox', 'Unknown'),
-            ('FennecAndroid', 'Linux')
-    ]:
-        # Get the active versions
-        versions = [
-            item['version'] for item in
-            helper.fetch_json(host_2, '/api/ProductVersions', params={
-                'product': product,
-                'active': 'true',
-                'is_featured': 'true',
-            })['hits']
-        ]
-
-        print('/api/ADI -> %s (%s)' % (product, versions))
-
-        url = '/api/ADI'
-        params = {
-            'start_date': LAST_WEEK,
-            'end_date': TODAY,
+    # Get the active versions from host 2
+    versions = [
+        item['version'] for item in
+        helper.fetch_json(host_2, '/api/ProductVersions', params={
             'product': product,
-            'platforms': platform,
-            'versions': versions
-        }
+            'active': 'true',
+            'is_featured': 'true',
+        })['hits']
+    ]
 
-        adi_1 = helper.fetch_json(host_1, url, params=params)['hits']
-        adi_1 = sorted(adi_1, key=lambda item: item['date'])
+    print('/api/ADI -> %s (%s)' % (product, versions))
 
-        adi_2 = helper.fetch_json(host_2, url, params=params)['hits']
-        adi_2 = sorted(adi_2, key=lambda item: item['date'])
+    url = '/api/ADI'
+    params = {
+        'start_date': LAST_WEEK,
+        'end_date': TODAY,
+        'product': product,
+        'platforms': platform,
+        'versions': versions
+    }
 
-        errors = 0
-        for item_1, item_2 in zip_longest(adi_1, adi_2, fillvalue={}):
-            if item_1 != item_2:
-                helper.print_compare(item_1, item_2)
-                errors += 1
+    # Fetch adi data from host 1
+    adi_1 = helper.fetch_json(host_1, url, params=params)['hits']
+    adi_1_map = build_map(adi_1)
 
-        assert errors == 0
+    # Fetch adi data from host 2
+    adi_2 = helper.fetch_json(host_2, url, params=params)['hits']
+    adi_2_map = build_map(adi_2)
+
+    errors = 0
+
+    # Compare host 1 -> host 2
+    for key in adi_1_map.keys():
+        item_1 = adi_1_map.get(key, {})
+        item_2 = adi_2_map.get(key, {})
+
+        if item_1 != item_2:
+            helper.print_compare(item_1, item_2)
+            errors += 1
+
+    # Compare host 1 <- host 2
+    for key in adi_2_map.keys():
+        item_1 = adi_1_map.get(key, {})
+        item_2 = adi_2_map.get(key, {})
+
+        if item_1 != item_2:
+            helper.print_compare(item_1, item_2)
+            errors += 1
+
+    total = len(adi_1) + len(adi_2)
+    print('%s, %s: total %s, errors %s' % (product, platform, total, errors))
+    assert errors == 0
